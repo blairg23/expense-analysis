@@ -1,0 +1,53 @@
+[
+  {
+    "model": "expensive.usertype",
+    "pk": 1,
+    "fields": {
+      "name": "owner",
+      "description": "The owner",
+      "created": "2016-11-16T06:45:55.243Z",
+      "updated": "2016-11-16T06:45:55.243Z"
+    }
+  },
+  {
+    "model": "expensive.usertype",
+    "pk": 2,
+    "fields": {
+      "name": "admin",
+      "description": "Administrator of a site",
+      "created": "2016-11-16T06:46:09.063Z",
+      "updated": "2016-11-16T06:46:09.063Z"
+    }
+  },
+  {
+    "model": "expensive.usertype",
+    "pk": 3,
+    "fields": {
+      "name": "developer",
+      "description": "Expensive Developer",
+      "created": "2017-08-03T18:54:47.519Z",
+      "updated": "2017-08-03T18:54:47.519Z"
+    }
+  },
+  {
+    "model": "expensive.extendeduser",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$36000$28YJsKliHugM$6g+egChXS9NB+cqKUZKQSkwhUkM05pfnb3ONeFuoUNs=",
+      "last_login": "2017-08-10T03:14:38.686Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "Expensive",
+      "last_name": "Administrator",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2016-11-15T23:11:27.289Z",
+      "email": "admin@intelligen.technology",
+      "mobile": null,
+      "type": 2,
+      "slug": "expensive-admin",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
