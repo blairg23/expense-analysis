@@ -4,6 +4,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, User, PermissionsMixin
 from django.db import models
 
+
 class UserType(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
@@ -14,6 +15,7 @@ class UserType(models.Model):
     def __str__(self):
         return self.name
 
+
 class ExtendedUser(AbstractUser):
     email = models.EmailField(unique=True)
     mobile = models.CharField(max_length=20, null=True, default=None)
@@ -22,10 +24,32 @@ class ExtendedUser(AbstractUser):
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
-    	'username',
+        'username',
         'first_name',
         'last_name'
     ]
     
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
+
+
+class TransactionType(models.Model):
+    description = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.description
+
+
+class Transaction(models.Model):
+    owner = models.ForeignKey(ExtendedUser, related_name='transactions', on_delete=models.CASCADE)
+    transaction_date = models.DateField()
+    post_date = models.DateField()
+    amount = models.FloatField()
+    description = models.TextField()
+    type = models.ManyToManyField(TransactionType, related_name='transaction')
+    # Administrative Fields
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.id
