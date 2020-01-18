@@ -20,7 +20,7 @@ urlpatterns = [
 	#
 	# Administration
 	#
-	url(r'^admin_tools/', include('admin_tools.urls')),
+	# url(r'^admin_tools/', include('admin_tools.urls')),
     url(r'^admin/', admin.site.urls),
     #
     # Authentication

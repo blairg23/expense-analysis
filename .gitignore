@@ -1,5 +1,6 @@
 ### Custom ###
 .idea
+*.sqlite3
 
 # Created by https://www.gitignore.io/api/macos,django,python,pycharm,windows,sublimetext,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=macos,django,python,pycharm,windows,sublimetext,visualstudiocode

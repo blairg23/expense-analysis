@@ -35,7 +35,7 @@ ADMIN = [
 ADMINS = ADMIN
 
 ALLOWED_HOSTS = [
-    'localhost'
+    'http://localhost'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -46,11 +46,11 @@ CORS_REPLACE_HTTPS_REFERER = True
 
 INSTALLED_APPS = [
     ## Admin Tools
-    'admin_tools',
-    'admin_tools.theming',
-    'admin_tools.menu',
-    'admin_tools.dashboard',
-    'admin_tools_stats',
+    # 'admin_tools',
+    # 'admin_tools.theming',
+    # 'admin_tools.menu',
+    # 'admin_tools.dashboard',
+    # 'admin_tools_stats',
     ## Django default
     'django.contrib.admin',
     'django.contrib.auth',
@@ -129,28 +129,10 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     # ---------------------------------------------
     # Local Settings
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
-    # ---------------------------------------------
-    # Development Settings
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'localhost',
-        'NAME': 'expensive',
-        'USER': 'root',
-        'PASSWORD': 'tomis_admin2016'
-    },
-    # ---------------------------------------------
-    # Production Settings
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'HOST': '1.1.1.1',
-    #     'NAME': 'expense_analysis',
-    #     'USER': 'root',
-    #     'PASSWORD': 'expensive_admin2018'
-    # },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'expensive.sqlite3',
+    }
 }
 
 # REST Framework
