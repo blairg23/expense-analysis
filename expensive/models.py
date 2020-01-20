@@ -40,8 +40,16 @@ class TransactionType(models.Model):
         return self.description
 
 
+class Source(models.Model):
+    source = models.CharField(max_length=50)
+
+    def __str___(self):
+        return self.source
+
+
 class Transaction(models.Model):
     owner = models.ForeignKey(ExtendedUser, related_name='transactions', on_delete=models.CASCADE)
+    source = models.ForeignKey(Source, related_name="transactions", on_delete=models.CASCADE)
     transaction_date = models.DateField()
     post_date = models.DateField()
     amount = models.FloatField()

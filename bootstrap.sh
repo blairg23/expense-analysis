@@ -6,16 +6,16 @@ echo "- Updating apt-get"
 sudo apt-get update
 sudo apt-get upgrade
 
-echo -n "- Making sure we have mysql-server installed."
-sudo apt-get install mariadb-server
-sudo apt-get install mariadb-client
-sudo apt-get install libmysqlclient-dev
-echo " Done"
+#echo -n "- Making sure we have mysql-server installed."
+#sudo apt-get install mariadb-server
+#sudo apt-get install mariadb-client
+#sudo apt-get install libmysqlclient-dev
+#echo " Done"
 
-echo -n "- Cleaning up any databases that already exist and recreating:"
-mysqladmin --user=root --password=tomis_admin2016 drop expensive
-mysql --user=root --password=tomis_admin2016 -e "CREATE DATABASE expensive CHARACTER SET latin1 COLLATE latin1_general_ci;"
-echo " Done"
+#echo -n "- Cleaning up any databases that already exist and recreating:"
+#mysqladmin --user=root --password=tomis_admin2016 drop expensive
+#mysql --user=root --password=tomis_admin2016 -e "CREATE DATABASE expensive CHARACTER SET latin1 COLLATE latin1_general_ci;"
+#echo " Done"
 
 echo -n "- Cleaning up any migrations that already exist:"
 # rm tomis
@@ -30,12 +30,12 @@ echo "- Making sure we have the python development libraries installed"
 sudo apt-get install python3-dev > /dev/null
 echo " Done"
 
-echo "- Making sure we have the mysqlclient-dev dependencies."
-sudo apt-get install libmysqlclient-dev
-echo " Done"
+#echo "- Making sure we have the mysqlclient-dev dependencies."
+#sudo apt-get install libmysqlclient-dev
+#echo " Done"
 
 echo -n "- Installing requirements:"
-sudo pip3 install -r requirements.txt --upgrade #> /dev/null 2>&1
+pip3 install -r requirements.txt --upgrade #> /dev/null 2>&1
 echo " Done"
 
 echo -n "- Bootstrapping the database with some basic information:"
@@ -46,7 +46,7 @@ echo -n "- Bootstrapping the database with some basic information:"
 # Base system data
 #
 ./manage.py loaddata expensive/fixtures/01_sites.json
-./manage.py loaddata expensive/fixtures/01_users.json
+./manage.py loaddata expensive/fixtures/02_users.json
 
 echo " Done"
 
