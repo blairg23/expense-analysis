@@ -6,6 +6,7 @@ import numpy as np
 month_names = [cal.month_name[i] for i in np.arange(1,13)]
 months = pd.Series(np.arange(1,13), index=month_names)
 
+
 def get_unique_types(dataframe=None):
 	'''
 	Get the unique types from the given dataframe.
@@ -42,7 +43,7 @@ for filename in os.listdir('data'):
 		stripped_filename = os.path.splitext(filename)[0]+'.txt'
 		if not os.path.exists('output'):
 			os.makedirs('output')
-		with open(os.path.join('output',stripped_filename), 'a+') as outfile:
-			[outfile.write('{key}: {value}\n'.format(key=key, value=value)) for key,value in sorted(expenses.items())]
+		with open(os.path.join('output', stripped_filename), 'a+') as outfile:
+			[outfile.write('{key}: {value}\n'.format(key=key, value=value)) for key, value in sorted(expenses.items())]
 	except Exception as e:
-		print '[ERROR]', e
+		print('[ERROR]', e)
