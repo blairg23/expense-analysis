@@ -23,6 +23,7 @@ class UserTypeSerializer(serializers.ModelSerializer):
         ]
 
 
+# Copied from https://stackoverflow.com/a/36911368/1224827
 class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(required=allauth_settings.EMAIL_REQUIRED)
     first_name = serializers.CharField(required=True, write_only=True)
