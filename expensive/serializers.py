@@ -90,6 +90,9 @@ class UserTypeField(serializers.Field):
 
 
 class PersonSerializer(serializers.Serializer):
+    """
+    Use this serializer to create a new person (extendeduser) programmatically.
+    """
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     email = serializers.EmailField()
@@ -158,7 +161,7 @@ class SourceSerializer(serializers.Serializer):
 
 
 class TransactionSerializer(serializers.Serializer):
-    owner = PersonSerializer()
+    # owner = ExtendedUserSerializer()
     source = SourceSerializer()
     transaction_date = serializers.DateField()
     post_date = serializers.DateField()

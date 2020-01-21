@@ -77,7 +77,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.twitter',
     ## DRF Docs
-    'rest_framework_docs',
+    'drf_yasg',
     ## Expensive Apps
     'expensive',
 
@@ -161,9 +161,29 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 REST_FRAMEWORK_EXTENSIONS = {
     'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 15
 }
-# Hre we disable docs on production
+# Here we disable docs on production
 REST_FRAMEWORK_DOCS = {
     'HIDE_DOCS': False
+}
+
+# Swagger docs settings
+LOGIN_URL = '/admin/login/'
+LOGOUT_URL = '/admin/logout/'
+JSON_EDITOR = True
+DOC_EXPANSION = 'full'
+# SHOW_REQUEST_HEADERS = True
+# SUPPORTED_SUBMIT_METHODS = True
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        "basic": {
+            "type": "basic"
+        },
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+      }
+    }
 }
 
 # All Auth settings

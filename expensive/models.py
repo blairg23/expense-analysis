@@ -7,7 +7,7 @@ from django.db import models
 
 
 class UserType(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.TextField(choices=(('admin', 'Administrator'), ('developer', 'Developer')))
     description = models.TextField()
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
@@ -22,6 +22,7 @@ class ExtendedUser(AbstractUser):
     mobile = models.CharField(max_length=20, null=True, default=None)
     type = models.ForeignKey(UserType, null=True, default=None, on_delete=models.CASCADE)
     slug = AutoSlugField(populate_from='get_full_name', unique=True)
+    # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
@@ -44,18 +45,20 @@ class ExtendedUser(AbstractUser):
 
 
 class TransactionType(models.Model):
-    transaction_type = models.CharField(max_length=10)
+    transaction_type = models.TextField(choices=(('debit', 'Debit'), ('credit', 'Credit')))
     description = models.CharField(max_length=50)
+    # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    def __str(self):
+    def __str__(self):
         return self.transaction_type
 
 
 class Category(models.Model):
     category = models.CharField(max_length=50)
     description = models.CharField(max_length=50)
+    # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -65,10 +68,11 @@ class Category(models.Model):
 
 class Source(models.Model):
     source = models.CharField(max_length=50)
+    # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    def __str___(self):
+    def __str__(self):
         return self.source
 
 

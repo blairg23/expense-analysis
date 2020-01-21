@@ -4,7 +4,7 @@ django-autoslug
 django-cors-headers
 django-rest-auth
 djangorestframework
-drfdocs2
+drf-yasg
 factory-boy
 ipython
 numpy

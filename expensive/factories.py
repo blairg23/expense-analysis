@@ -39,7 +39,7 @@ class TransactionTypeFactory(factory.DjangoModelFactory):
     """Factory for `expensive.TransactionType` Django model."""
 
     class Meta:
-        model = models.UserType
+        model = models.TransactionType
 
     transaction_type = factory.Iterator(["debit", "credit"])
     description = factory.Faker("word")
