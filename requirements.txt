@@ -27,6 +27,7 @@ oauthlib==3.1.0
 pandas==0.25.3
 parso==0.5.2              # via jedi
 pickleshare==0.7.5        # via ipython
+pip-tools<4.3
 prompt-toolkit==3.0.2     # via ipython
 pygments==2.5.2           # via ipython
 python-dateutil==2.8.1    # via pandas
@@ -38,6 +39,7 @@ six==1.14.0               # via django-rest-auth, python-dateutil, traitlets
 sqlparse==0.3.0           # via django
 traitlets==4.3.3          # via ipython
 urllib3==1.25.7           # via requests
+uWSGI==2.0.18
 wcwidth==0.1.8            # via prompt-toolkit
 
 # The following packages are considered to be unsafe in a requirements file:

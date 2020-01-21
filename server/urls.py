@@ -29,7 +29,7 @@ urlpatterns = [
     #
     # Registration
     #
-    #url(r'^api/auth/register/', include('rest_auth.registration.urls')),
+    url(r'^api/auth/register/', include('rest_auth.registration.urls')),
     #
     # API Docs
     #

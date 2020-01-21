@@ -1,4 +1,5 @@
 from autoslug import AutoSlugField
+from autoslug.utils import slugify
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, User, PermissionsMixin
@@ -28,9 +29,16 @@ class ExtendedUser(AbstractUser):
         'first_name',
         'last_name'
     ]
-    
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.first_name + ' ' + self.last_name)
+        return super(ExtendedUser, self).save(*args, **kwargs)
 
 
 class TransactionType(models.Model):

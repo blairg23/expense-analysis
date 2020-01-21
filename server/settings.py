@@ -35,11 +35,11 @@ ADMIN = [
 ADMINS = ADMIN
 
 ALLOWED_HOSTS = [
-    'http://localhost'
+    '127.0.0.1',
+    'localhost'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = ALLOWED_HOSTS
 CORS_REPLACE_HTTPS_REFERER = True
 
 # Application definition
@@ -93,8 +93,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    ###
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'server.urls'
@@ -112,7 +110,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'loaders': [
-                'admin_tools.template_loaders.Loader',
+                # 'admin_tools.template_loaders.Loader',
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',
             ],
@@ -131,7 +129,7 @@ DATABASES = {
     # Local Settings
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'expensive.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -158,7 +156,7 @@ REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'expensive.serializers.ExtendedUserSerializer'
 }
 REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'expensive.serializers.ExtendedRegisterSerializer',
+    'REGISTER_SERIALIZER': 'expensive.serializers.RegisterSerializer',
 }
 REST_FRAMEWORK_EXTENSIONS = {
     'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 15

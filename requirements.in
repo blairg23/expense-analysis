@@ -9,3 +9,4 @@ ipython
 numpy
 oauthlib
 pandas
+uWSGI
