@@ -5,6 +5,7 @@ django-cors-headers
 django-rest-auth
 djangorestframework
 drfdocs2
+factory-boy
 ipython
 numpy
 oauthlib
