@@ -15,23 +15,36 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.urls import re_path, path
+from rest_framework.routers import DefaultRouter
+
+from expensive.urls import expensive_api_router
+
+api_root_router = DefaultRouter()
+api_root_router.registry.extend(expensive_api_router.registry)
+
+app_name = 'server'
 
 urlpatterns = [
 	#
 	# Administration
 	#
 	# url(r'^admin_tools/', include('admin_tools.urls')),
-    url(r'^admin/', admin.site.urls),
+    re_path(r'^admin/', admin.site.urls),
     #
     # Authentication
     #
-    url(r'^api/auth/', include('rest_auth.urls')),
+    re_path(r'^api/auth/', include('rest_auth.urls')),
     #
     # Registration
     #
-    url(r'^api/auth/register/', include('rest_auth.registration.urls')),
+    re_path(r'^api/auth/register/', include('rest_auth.registration.urls')),
     #
     # API Docs
     #
-    url(r'^api/docs/', include('rest_framework_docs.urls')),
+    re_path(r'^api/docs/', include('rest_framework_docs.urls')),
+    #
+    # API
+    #
+    re_path(r'^api/', include((api_root_router.urls, "api"), namespace="api")),
 ]

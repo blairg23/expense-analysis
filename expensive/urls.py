@@ -6,5 +6,5 @@ from expensive import viewsets
 
 app_name = 'expensive'
 
-router = DefaultRouter()
-router.register(f"{app_name}/transactions", viewsets.TransactionViewSet, basename="expensive.Transaction")
+expensive_api_router = DefaultRouter()
+expensive_api_router.register(f"{app_name}/transactions", viewsets.TransactionViewSet, basename="expensive.Transaction")
