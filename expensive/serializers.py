@@ -4,7 +4,7 @@ from django.utils.text import slugify
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 
-from expensive.models import UserType, ExtendedUser
+from expensive.models import UserType, ExtendedUser, TransactionType, Category, Source, Transaction
 
 
 class UserTypeSerializer(serializers.ModelSerializer):
@@ -17,7 +17,7 @@ class UserTypeSerializer(serializers.ModelSerializer):
         ]
 
 
-class ExtendedUserRegisterSerializer(RegisterSerializer):
+class ExtendedRegisterSerializer(RegisterSerializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     mobile = serializers.CharField()
@@ -61,13 +61,13 @@ class UserTypeField(serializers.Field):
 
 
 class PersonSerializer(serializers.Serializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.EmailField()
+    mobile = serializers.CharField()
     type = UserTypeField()
     password1 = serializers.CharField()
     password2 = serializers.CharField()
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
-    mobile = serializers.CharField()
-    email = serializers.EmailField()
 
     class Meta:
         model = ExtendedUser
@@ -100,3 +100,44 @@ class PersonSerializer(serializers.Serializer):
         person.set_password(password1)
         person.save()
         return person
+
+
+class TransactionTypeSerializer(serializers.Serializer):
+    transaction_type = serializers.CharField()
+    description = serializers.CharField()
+
+    class Meta:
+        model = TransactionType
+        fields = '__all__'
+
+
+class CategorySerializer(serializers.Serializer):
+    category = serializers.CharField()
+    description = serializers.CharField()
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+class SourceSerializer(serializers.Serializer):
+    source = serializers.CharField()
+
+    class Meta:
+        model = Source
+        fields = '__all__'
+
+
+class TransactionSerializer(serializers.Serializer):
+    owner = PersonSerializer()
+    source = SourceSerializer()
+    transaction_date = serializers.DateField()
+    post_date = serializers.DateField()
+    amount = serializers.FloatField()
+    description = serializers.CharField()
+    category = CategorySerializer(many=True)
+    type = TransactionTypeSerializer()
+
+    class Meta:
+        model = Category
+        fields = '__all__'

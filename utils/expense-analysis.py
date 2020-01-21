@@ -31,19 +31,19 @@ def process_csv(filename=None):
 	'''
 	Given the filename of a CSV, returns a dictionary of the expenses.
 	'''
-	expenses = pd.read_csv(os.path.join('data', filename))
+	expenses = pd.read_csv(os.path.join('../data', filename))
 	
 	types = get_unique_types(dataframe=expenses)
 	return get_sum_dict(types=types, dataframe=expenses)
 
 
-for filename in os.listdir('data'):
+for filename in os.listdir('../data'):
 	try:
 		expenses = process_csv(filename=filename)
 		stripped_filename = os.path.splitext(filename)[0]+'.txt'
-		if not os.path.exists('output'):
-			os.makedirs('output')
-		with open(os.path.join('output', stripped_filename), 'a+') as outfile:
+		if not os.path.exists('../output'):
+			os.makedirs('../output')
+		with open(os.path.join('../output', stripped_filename), 'a+') as outfile:
 			[outfile.write('{key}: {value}\n'.format(key=key, value=value)) for key, value in sorted(expenses.items())]
 	except Exception as e:
 		print('[ERROR]', e)

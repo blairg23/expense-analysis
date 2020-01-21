@@ -34,10 +34,19 @@ class ExtendedUser(AbstractUser):
 
 
 class TransactionType(models.Model):
+    transaction_type = models.CharField(max_length=10)
+    description = models.CharField(max_length=50)
+
+    def __str(self):
+        return self.transaction_type
+
+
+class Category(models.Model):
+    category = models.CharField(max_length=50)
     description = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.description
+        return self.category
 
 
 class Source(models.Model):
@@ -54,10 +63,11 @@ class Transaction(models.Model):
     post_date = models.DateField()
     amount = models.FloatField()
     description = models.TextField()
-    type = models.ManyToManyField(TransactionType, related_name='transaction')
+    category = models.ManyToManyField(Category, related_name='transactions')
+    type = models.ForeignKey(TransactionType, related_name='transactions', on_delete=models.CASCADE)
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.id
+        return f"{self.source} - {self.id}"
