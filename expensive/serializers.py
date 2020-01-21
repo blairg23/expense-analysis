@@ -161,7 +161,7 @@ class SourceSerializer(serializers.Serializer):
 
 
 class TransactionSerializer(serializers.Serializer):
-    # owner = ExtendedUserSerializer()
+    owner = ExtendedUserSerializer()
     source = SourceSerializer()
     transaction_date = serializers.DateField()
     post_date = serializers.DateField()
