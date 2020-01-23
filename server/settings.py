@@ -312,3 +312,6 @@ LOGGING1 = {
         'level': 'INFO'
     },
 }
+
+### Custom
+SUPPORTED_PROVIDERS = ['discover']

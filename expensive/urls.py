@@ -1,4 +1,4 @@
-from django.urls import re_path
+from django.urls import  path
 
 from rest_framework.routers import DefaultRouter
 
@@ -8,3 +8,8 @@ app_name = 'expensive'
 
 expensive_api_router = DefaultRouter()
 expensive_api_router.register(f"{app_name}/transactions", viewsets.TransactionViewSet, basename="expensive.Transaction")
+
+# urlpatterns = expensive_api_router.urls
+# urlpatterns += [
+#     path(f"{app_name}/transactions/upload_file/", view=viewsets.TransactionViewSet.as_view({'post': 'upload_file'}), name='upload-file'),
+# ]

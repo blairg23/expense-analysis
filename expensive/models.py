@@ -7,7 +7,7 @@ from django.db import models
 
 
 class UserType(models.Model):
-    name = models.TextField(choices=(('admin', 'Administrator'), ('developer', 'Developer')))
+    name = models.TextField(choices=(('admin', 'Administrator'), ('developer', 'Developer')), unique=True)
     description = models.TextField()
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
@@ -45,7 +45,7 @@ class ExtendedUser(AbstractUser):
 
 
 class TransactionType(models.Model):
-    transaction_type = models.TextField(choices=(('debit', 'Debit'), ('credit', 'Credit')))
+    transaction_type = models.TextField(choices=(('debit', 'Debit'), ('credit', 'Credit')), unique=True)
     description = models.CharField(max_length=50)
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
@@ -56,7 +56,7 @@ class TransactionType(models.Model):
 
 
 class Category(models.Model):
-    category = models.CharField(max_length=50)
+    category = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=50)
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
@@ -67,7 +67,7 @@ class Category(models.Model):
 
 
 class Source(models.Model):
-    source = models.CharField(max_length=50)
+    source = models.TextField(choices=(('capitalone', 'Capital One'), ('citi', 'Citi'), ('chase', 'Chase'), ('discover', 'Discover')), unique=True)
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

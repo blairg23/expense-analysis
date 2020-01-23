@@ -6,6 +6,7 @@
 #
 asgiref==3.2.3            # via django
 backcall==0.1.0           # via ipython
+celery==4.4.0
 certifi==2019.11.28       # via requests
 chardet==3.0.4            # via requests
 colorama==0.4.3           # via ipython
@@ -28,7 +29,7 @@ oauthlib==3.1.0
 pandas==0.25.3
 parso==0.5.2              # via jedi
 pickleshare==0.7.5        # via ipython
-pip-tools<4.3
+pip-tools==4.3.0
 prompt-toolkit==3.0.2     # via ipython
 pygments==2.5.2           # via ipython
 python-dateutil==2.8.1    # via pandas
