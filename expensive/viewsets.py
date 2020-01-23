@@ -30,15 +30,17 @@ class TransactionViewSet(ModelViewSet):
     @action(detail=True, methods=['options', 'post'])
     def upload_file(self, request, pk=None):
         provider = request.POST.get('provider')
-        csv_file = request.FILES['csv_file']
-        transactions_dataframe = pandas.read_csv(csv_file)
-        transactions_dict = get_transactions_dict(transactions_dataframe=transactions_dataframe)# json.loads(transactions_dataframe.to_json())
+        csv_files = request.FILES.getlist('csv_file')
+        for csv_file in csv_files:
+            print(csv_file)
+        for csv_file in csv_files:
+            transactions_dataframe = pandas.read_csv(csv_file)
+            transactions_dict = get_transactions_dict(transactions_dataframe=transactions_dataframe)  # json.loads(transactions_dataframe.to_json())
 
-        if provider not in settings.SUPPORTED_PROVIDERS:
-            response = Response({'error': f'provider not found, choose from: {settings.SUPPORTED_PROVIDERS}'}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            response = discover_tasks.import_transactions(owner=request.user, transactions_dict=transactions_dict)
-            # response = getattr(f'{provider}_tasks', 'import_transactions')(transactions_dict=transactions_dict)
-            response = Response("File Uploaded Successfully!", status=status.HTTP_200_OK)
+            if provider not in settings.SUPPORTED_PROVIDERS:
+                return Response({'error': f'provider not found, choose from: {settings.SUPPORTED_PROVIDERS}'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                discover_tasks.import_transactions(owner=request.user, transactions_dict=transactions_dict)
+                response = Response("File(s) Uploaded Successfully!", status=status.HTTP_200_OK)
 
         return response

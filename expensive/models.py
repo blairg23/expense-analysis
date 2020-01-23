@@ -90,4 +90,4 @@ class Transaction(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.source} - {self.id}"
+        return f"{self.source} - {self.transaction_date} - {self.amount} - {self.description}"

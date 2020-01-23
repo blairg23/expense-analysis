@@ -17,7 +17,7 @@ def import_transactions(owner, transactions_dict):
         transaction_type_name = 'credit' if amount > 0 else 'debit'
         transaction_type, created = TransactionType.objects.get_or_create(transaction_type=transaction_type_name)
 
-        transaction_object = Transaction.objects.create(
+        transaction_object, created = Transaction.objects.get_or_create(
             owner=owner,
             source=SOURCE,
             transaction_date=transaction_date,
@@ -27,7 +27,8 @@ def import_transactions(owner, transactions_dict):
             type=transaction_type
         )
 
-        transaction_object.category.add(transaction_category)
+        if created:
+            transaction_object.category.add(transaction_category)
 
     transactions.append(transaction_object)
 
