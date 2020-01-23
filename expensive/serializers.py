@@ -10,7 +10,8 @@ from django.utils.text import slugify
 from rest_framework import serializers
 
 
-from expensive.models import UserType, ExtendedUser, TransactionType, Category, Source, Transaction
+from expensive.models import UserType, ExtendedUser, TransactionType, Category, \
+    Source, Transaction
 
 
 class UserTypeSerializer(serializers.ModelSerializer):
@@ -171,5 +172,5 @@ class TransactionSerializer(serializers.Serializer):
     type = TransactionTypeSerializer()
 
     class Meta:
-        model = Category
+        model = Transaction
         fields = '__all__'
