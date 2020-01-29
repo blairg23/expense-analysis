@@ -8,10 +8,12 @@ from rest_framework.response import Response
 
 from expensive import serializers
 from expensive import permissions
+from expensive.serializers import TransactionSerializer
 from expensive.utils import get_model, get_transactions_dict
 
-from providers.discover import tasks as discover_tasks
+import providers
 
+from functools import reduce
 import pandas
 
 
@@ -27,8 +29,9 @@ class TransactionViewSet(ModelViewSet):
     def get_queryset(self):
         return get_model("expensive.Transaction").objects.filter(owner=self.request.user)
 
-    @action(detail=True, methods=['options', 'post'])
-    def upload_file(self, request, pk=None):
+    @action(detail=False, methods=['options', 'post'])
+    def upload_files(self, request):
+        current_user = request.user
         provider = request.POST.get('provider')
         csv_files = request.FILES.getlist('csv_file')
         for csv_file in csv_files:
@@ -40,7 +43,29 @@ class TransactionViewSet(ModelViewSet):
             if provider not in settings.SUPPORTED_PROVIDERS:
                 return Response({'error': f'provider not found, choose from: {settings.SUPPORTED_PROVIDERS}'}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                discover_tasks.import_transactions(owner=request.user, transactions_dict=transactions_dict)
+                print('provider:', provider)
+                getattr(getattr(getattr(providers, provider), "tasks"), "import_transactions")(owner=current_user, transactions_dict=transactions_dict)
+                # reduce(getattr, f"{provider}.tasks.import_transactions".split("."), providers)(owner=current_user, transactions_dict=transactions_dict)
+
                 response = Response("File(s) Uploaded Successfully!", status=status.HTTP_200_OK)
 
         return response
+
+    # @action(detail=False, methods=['options', 'get'])
+    # def monthly_report(self, request):
+    #     response = []
+    #     valid_transactions = []
+    #     start_date = request.query_params.get('start_date')
+    #     end_date = request.query_params.get('end_date')
+    #     transactions = get_model("expensive.Transaction").objects.filter(owner=self.request.user, post_date__gte=start_date, post_date__lte=end_date)
+    #     for transaction in transactions:
+    #         transaction_data = {
+    #
+    #         }
+        #     transaction_serializer = TransactionSerializer(data=transaction)
+        #     # print(transaction_serializer.is_valid())
+        #     print(transaction_serializer.initial_data())
+        #     if transaction_serializer.is_valid():
+        #         valid_transactions.append(transaction_serializer.data())
+        #
+        # return Response(valid_transactions, status=status.HTTP_200_OK)
