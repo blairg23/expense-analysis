@@ -314,4 +314,4 @@ LOGGING1 = {
 }
 
 ### Custom
-SUPPORTED_PROVIDERS = ['capitalone', 'discover']
+SUPPORTED_PROVIDERS = ['capitalone', 'chase', 'discover']

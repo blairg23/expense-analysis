@@ -34,8 +34,8 @@ class TransactionViewSet(ModelViewSet):
         current_user = request.user
         provider = request.POST.get('provider')
         csv_files = request.FILES.getlist('csv_file')
-        for csv_file in csv_files:
-            print(csv_file)
+        # for csv_file in csv_files:
+        #     print(csv_file)
         for csv_file in csv_files:
             transactions_dataframe = pandas.read_csv(csv_file)
             transactions_dict = get_transactions_dict(transactions_dataframe=transactions_dataframe)  # json.loads(transactions_dataframe.to_json())
@@ -43,7 +43,7 @@ class TransactionViewSet(ModelViewSet):
             if provider not in settings.SUPPORTED_PROVIDERS:
                 return Response({'error': f'provider not found, choose from: {settings.SUPPORTED_PROVIDERS}'}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                print('provider:', provider)
+                # print('provider:', provider)
                 getattr(getattr(getattr(providers, provider), "tasks"), "import_transactions")(owner=current_user, transactions_dict=transactions_dict)
                 # reduce(getattr, f"{provider}.tasks.import_transactions".split("."), providers)(owner=current_user, transactions_dict=transactions_dict)
 
