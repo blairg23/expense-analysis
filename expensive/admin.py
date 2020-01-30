@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from expensive.models import ExtendedUser, UserType, TransactionType, Transaction
+from expensive.models import ExtendedUser, UserType, TransactionType, Transaction, Category, Source
 
 
 @admin.register(UserType)
@@ -20,11 +20,26 @@ class TransactionTypeAdmin(admin.ModelAdmin):
     list_display_links = list_display
 
 
+@admin.register(Source)
+class SourceAdmin(admin.ModelAdmin):
+    list_display = ['source']
+    list_display_links = list_display
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['category', 'description']
+    list_display_links = list_display
+
+
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ['transaction_date', 'post_date', 'amount', 'description', 'category', 'type', 'source', 'owner']
-    list_display_links = list_display
-    list_filter = ['source']
+    list_display = ['transaction_date', 'post_date', 'amount', 'description', 'categories', 'type', 'source', 'owner']
+    list_display_links = ['transaction_date', 'post_date', 'amount', 'description', 'type', 'source', 'owner']
+    list_filter = ['source', 'category']
 
-    def category(self, instance):
-        return ", ".join([str(category) for category in instance.category.all()])
+    list_select_related = ['type', 'source', 'owner']
+
+    def categories(self, transaction):
+        # print(", ".join([str(category) for category in instance.category.all()]))
+        return ", ".join([str(category) for category in transaction.category.all()])
