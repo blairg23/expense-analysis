@@ -42,6 +42,9 @@ ALLOWED_HOSTS = [
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_REPLACE_HTTPS_REFERER = True
 
+# So you can delete a bunch of rows
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -314,4 +317,4 @@ LOGGING1 = {
 }
 
 ### Custom
-SUPPORTED_PROVIDERS = ['capitalone', 'chase', 'discover']
+SUPPORTED_PROVIDERS = ['capitalone', 'chase', 'citi', 'discover']

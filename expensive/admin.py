@@ -41,5 +41,4 @@ class TransactionAdmin(admin.ModelAdmin):
     list_select_related = ['type', 'source', 'owner']
 
     def categories(self, transaction):
-        # print(", ".join([str(category) for category in instance.category.all()]))
         return ", ".join([str(category) for category in transaction.category.all()])

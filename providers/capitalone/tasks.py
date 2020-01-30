@@ -15,25 +15,25 @@ def import_transactions(owner, transactions_dict):
         if transaction.get('ActivityDate') is not None:
             transaction_date = get_date(date_string=transaction.get('ActivityDate'), date_format='%Y-%m-%d')
             post_date = transaction_date
-            amount = transaction.get('Amount')
+            amount = float(transaction.get('Amount'))
             transaction_type_name = 'debit' if amount > 0 else 'credit'
             transaction_type, created = TransactionType.objects.get_or_create(transaction_type=transaction_type_name)
             transaction_category, created = Category.objects.get_or_create(category='None')
         else:
             transaction_date = get_date(date_string=transaction.get('Transaction Date'), date_format='%Y-%m-%d')
             post_date = get_date(date_string=transaction.get('Posted Date'), date_format='%Y-%m-%d')
-            debit = transaction.get('Debit')
-            credit = transaction.get('Credit')
+            debit = float(transaction.get('Debit'))
+            credit = float(transaction.get('Credit'))
             amount = None
             transaction_type_name = None
             transaction_type = None
 
-            if debit == '':
+            if debit == 0.0:
                 transaction_type_name = 'credit'
-                amount = credit
-            elif credit == '':
+                amount = float(credit)
+            elif credit == 0.0:
                 transaction_type_name = 'debit'
-                amount = debit
+                amount = float(debit)
 
             if transaction_type_name is not None:
                 transaction_type, created = TransactionType.objects.get_or_create(transaction_type=transaction_type_name)

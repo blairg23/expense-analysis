@@ -24,6 +24,6 @@ def get_date(date_string, date_format):
 def get_transactions_dict(transactions_dataframe):
     transactions_dict = []
     for index, row in transactions_dataframe.iterrows():
-        temp_dict = {key: value for key, value in zip(row.index, row[row.index])}
+        temp_dict = {str(key): str(value) for key, value in zip(row.index, row[row.index])}
         transactions_dict.append(temp_dict)
     return transactions_dict

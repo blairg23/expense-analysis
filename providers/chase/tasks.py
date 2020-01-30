@@ -12,7 +12,7 @@ def import_transactions(owner, transactions_dict):
     for transaction in transactions_dict:
         transaction_date = get_date(date_string=transaction.get('Transaction Date'), date_format='%Y-%m-%d')
         post_date = get_date(date_string=transaction.get('Post Date'), date_format='%Y-%m-%d')
-        amount = transaction.get('Amount')
+        amount = float(transaction.get('Amount'))
         transaction_category1, created = Category.objects.get_or_create(category=transaction.get('Category', 'None'))
         transaction_category2, created = Category.objects.get_or_create(category=transaction.get('Type', 'None'))
         transaction_type_name = 'credit' if amount > 0 else 'debit'
