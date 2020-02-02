@@ -45,7 +45,14 @@ class ExtendedUser(AbstractUser):
 
 
 class TransactionType(models.Model):
-    transaction_type = models.TextField(choices=(('debit', 'Debit'), ('credit', 'Credit')), unique=True)
+    transaction_type = models.TextField(choices=(
+        ('debit', 'Debit'),
+        ('credit', 'Credit'),
+        ('expense', 'Expense'),
+        ('payment', 'Payment'),
+        ('income', 'Income'),
+        ('fee', 'Fee')
+    ), unique=True)
     description = models.CharField(max_length=50)
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
@@ -86,8 +93,9 @@ class Transaction(models.Model):
     post_date = models.DateField()
     amount = models.FloatField()
     description = models.TextField()
-    category = models.ManyToManyField(Category, related_name='transactions')
-    type = models.ForeignKey(TransactionType, related_name='transactions', on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category, related_name='transactions', on_delete=models.DO_NOTHING)
+    accounting_type = models.ForeignKey(TransactionType, related_name='transactions', on_delete=models.DO_NOTHING)
+    semantic_type = models.ForeignKey(TransactionType, related_name='transactions', on_delete=models.DO_NOTHING)
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

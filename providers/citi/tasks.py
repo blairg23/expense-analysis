@@ -10,21 +10,18 @@ SOURCE, created = Source.objects.get_or_create(source='citi')
 def import_transactions(owner, transactions_dict):
     transactions = []
     for transaction in transactions_dict:
-        print(transaction)
         transaction_date = get_date(date_string=transaction.get('Date'), date_format='%Y-%m-%d')
         post_date = transaction_date
         debit = float(transaction.get('Debit'))
         credit = float(transaction.get('Credit'))
-        amount = None
+        amount = debit + credit
         transaction_type_name = None
         transaction_type = None
 
         if debit == 0.0:
             transaction_type_name = 'credit'
-            amount = float(credit)
         elif credit == 0.0:
             transaction_type_name = 'debit'
-            amount = float(debit)
 
         if transaction_type_name is not None:
             transaction_type, created = TransactionType.objects.get_or_create(transaction_type=transaction_type_name)
