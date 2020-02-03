@@ -77,7 +77,7 @@ class Category(models.Model):
 
 
 class Source(models.Model):
-    source = models.TextField()#(choices=(('capitalone', 'Capital One'), ('citi', 'Citi'), ('chase', 'Chase'), ('discover', 'Discover')), unique=True)
+    source = models.TextField(choices=(('capitalone', 'Capital One'), ('citi', 'Citi'), ('chase', 'Chase'), ('discover', 'Discover')), unique=True)
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

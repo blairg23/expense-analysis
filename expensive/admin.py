@@ -38,7 +38,7 @@ class TransactionAdmin(admin.ModelAdmin):
     list_display_links = ['transaction_date', 'post_date', 'amount', 'description', 'accounting_type', 'semantic_type', 'source', 'owner']
     list_filter = ['source', 'category']
 
-    list_select_related = ['type', 'source', 'owner']
+    list_select_related = ['accounting_type', 'semantic_type', 'source', 'owner']
 
     def categories(self, transaction):
         return ", ".join([str(category) for category in transaction.category.all()])

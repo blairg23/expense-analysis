@@ -143,6 +143,9 @@ class TransactionTypeSerializer(serializers.Serializer):
         model = TransactionType
         fields = '__all__'
 
+    def create(self, validated_data):
+        return TransactionType.objects.create(**validated_data)
+
 
 class CategorySerializer(serializers.Serializer):
     category = serializers.CharField()
@@ -160,17 +163,24 @@ class SourceSerializer(serializers.Serializer):
         model = Source
         fields = '__all__'
 
+    def create(self, validated_data):
+        return Source.objects.create(**validated_data)
+
 
 class TransactionSerializer(serializers.Serializer):
-    owner = ExtendedUserSerializer()
-    source = SourceSerializer()
+    owner = ExtendedUserSerializer(read_only=True)
+    source = SourceSerializer(read_only=True)
     transaction_date = serializers.DateField()
     post_date = serializers.DateField()
     amount = serializers.FloatField()
     description = serializers.CharField()
-    category = CategorySerializer(many=True)
-    type = TransactionTypeSerializer()
+    category = CategorySerializer(many=True, read_only=True)
+    accounting_type = TransactionTypeSerializer(read_only=True)
+    semantic_type = TransactionTypeSerializer(read_only=True)
 
     class Meta:
         model = Transaction
         fields = '__all__'
+
+    def create(self, validated_data):
+        return Transaction.objects.create(**validated_data)

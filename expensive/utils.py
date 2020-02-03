@@ -21,9 +21,12 @@ def get_date(date_string, date_format):
     return datetime.datetime.strftime(parse(date_string), date_format)
 
 
-def get_transactions_dict(transactions_dataframe):
-    transactions_dict = []
+def get_transactions(transactions_dataframe):
+    """
+    :params pandas.DataFrame transactions_dataframe: A Pandas DataFrame representing a CSV of transactions.
+    """
+    transactions = []
     for index, row in transactions_dataframe.iterrows():
         temp_dict = {str(key): str(value) for key, value in zip(row.index, row[row.index])}
-        transactions_dict.append(temp_dict)
-    return transactions_dict
+        transactions.append(temp_dict)
+    return transactions
