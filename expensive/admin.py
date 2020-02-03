@@ -34,8 +34,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ['transaction_date', 'post_date', 'amount', 'description', 'categories', 'type', 'source', 'owner']
-    list_display_links = ['transaction_date', 'post_date', 'amount', 'description', 'type', 'source', 'owner']
+    list_display = ['transaction_date', 'post_date', 'amount', 'description', 'categories', 'accounting_type', 'semantic_type', 'source', 'owner']
+    list_display_links = ['transaction_date', 'post_date', 'amount', 'description', 'accounting_type', 'semantic_type', 'source', 'owner']
     list_filter = ['source', 'category']
 
     list_select_related = ['type', 'source', 'owner']
