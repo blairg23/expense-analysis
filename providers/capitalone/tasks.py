@@ -3,7 +3,7 @@ from server.celery import app
 from expensive.models import TransactionType, Category, Source, Transaction
 from expensive.utils import get_date
 
-SOURCE, created = Source.objects.get_or_create(source='capitalone')
+# SOURCE, created = Source.objects.get_or_create(source='capitalone')
 
 
 @app.task(ignore_result=True)
