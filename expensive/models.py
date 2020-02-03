@@ -12,7 +12,7 @@ class UserType(models.Model):
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return self.name
 
@@ -25,7 +25,7 @@ class ExtendedUser(AbstractUser):
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
         'username',
@@ -77,7 +77,7 @@ class Category(models.Model):
 
 
 class Source(models.Model):
-    source = models.TextField(choices=(('capitalone', 'Capital One'), ('citi', 'Citi'), ('chase', 'Chase'), ('discover', 'Discover')), unique=True)
+    source = models.TextField()#(choices=(('capitalone', 'Capital One'), ('citi', 'Citi'), ('chase', 'Chase'), ('discover', 'Discover')), unique=True)
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -93,9 +93,9 @@ class Transaction(models.Model):
     post_date = models.DateField()
     amount = models.FloatField()
     description = models.TextField()
-    category = models.ManyToManyField(Category, related_name='transactions', on_delete=models.DO_NOTHING)
-    accounting_type = models.ForeignKey(TransactionType, related_name='transactions', on_delete=models.DO_NOTHING)
-    semantic_type = models.ForeignKey(TransactionType, related_name='transactions', on_delete=models.DO_NOTHING)
+    category = models.ManyToManyField(Category, related_name='transactions')
+    accounting_type = models.ForeignKey(TransactionType, related_name='accounting_transactions', on_delete=models.DO_NOTHING)
+    semantic_type = models.ForeignKey(TransactionType, related_name='semantic_transactions', on_delete=models.DO_NOTHING)
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
