@@ -1,10 +1,6 @@
 from server.celery import app
 
-from expensive.models import TransactionType, Category, Source, Transaction
 from expensive.utils import get_date
-from expensive.serializers import ExtendedUserSerializer, TransactionTypeSerializer
-
-# SOURCE, created = Source.objects.get_or_create(source='capitalone')
 
 
 @app.task(ignore_result=True)
