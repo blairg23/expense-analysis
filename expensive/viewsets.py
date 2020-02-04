@@ -47,12 +47,13 @@ class TransactionViewSet(ModelViewSet):
                 return Response({'error': f'provider not found, choose from: {settings.SUPPORTED_PROVIDERS}'}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 transformed_transactions = getattr(getattr(getattr(providers, provider), "tasks"), "transform_transactions")(owner=current_user, transactions=transactions)
-                transactions = import_transactions(transactions=transformed_transactions)
+                import_transactions(transformed_transactions=transformed_transactions)
                 # getattr(getattr(getattr(providers, provider), "tasks"), "import_transactions")(owner=current_user, transactions_dict=transactions_dict)
                 # reduce(getattr, f"{provider}.tasks.import_transactions".split("."), providers)(owner=current_user, transactions_dict=transactions_dict)
 
-                # response = Response("File(s) Uploaded Successfully!", status=status.HTTP_200_OK)
-                response = Response(transactions, status=status.HTTP_200_OK)
+                response = Response("File(s) Uploaded Successfully!", status=status.HTTP_200_OK)
+                # transactions = TransactionSerializer(data=transactions).initial_data
+                # response = Response(transactions, status=status.HTTP_200_OK)
 
         return response
 

@@ -1,6 +1,6 @@
 from server.celery import app
 
-from expensive.models import TransactionType, Category, Transaction
+from expensive.models import TransactionType, Category, Source, Transaction
 from expensive.utils import get_date
 from expensive.serializers import ExtendedUserSerializer, TransactionTypeSerializer
 
@@ -10,19 +10,18 @@ from expensive.serializers import ExtendedUserSerializer, TransactionTypeSeriali
 @app.task(ignore_result=True)
 def transform_transactions(owner, transactions):
     """
-    :param list transactions:
+    :param ExtendedUser owner: The owner of the transactions being transformed.
+    :param list transactions: A list of transactions to transform.
     """
     transformed_transactions = []
-    categories = []
     for transaction in transactions:
+        categories = []
         if transaction.get('ActivityDate') is not None:
             transaction_date = get_date(date_string=transaction.get('ActivityDate'), date_format='%Y-%m-%d')
             post_date = transaction_date
             amount = float(transaction.get('Amount'))
             accounting_type = 'debit' if amount > 0 else 'credit'
             semantic_type = 'expense' if accounting_type == 'debit' else 'payment'
-            debit = amount if accounting_type == 'debit' else 0.0
-            credit = amount if accounting_type == 'credit' else 0.0
         else:
             transaction_date = get_date(date_string=transaction.get('Transaction Date'), date_format='%Y-%m-%d')
             post_date = get_date(date_string=transaction.get('Posted Date'), date_format='%Y-%m-%d')
@@ -36,31 +35,15 @@ def transform_transactions(owner, transactions):
                 categories.append(category)
 
         transaction_dict = {
-            "owner": vars(owner),
-            "source": {
-                "source": "capitalone"
-            },
+            "owner": owner,
+            "source": 'capitalone',
             "transaction_date": transaction_date,
             "post_date": post_date,
-            "debit": debit,
-            "credit": credit,
             "amount": abs(amount),
             "description": transaction.get('Description'),
-            "accounting_type": {
-                "transaction_type": accounting_type,
-                "description": accounting_type
-            },
-            "semantic_type": {
-                "transaction_type": semantic_type,
-                "description": semantic_type
-            },
-            "category": [
-                {
-                    "category": category,
-                    "description": category
-                }
-                for category in categories
-            ],
+            "accounting_type": accounting_type,
+            "semantic_type": semantic_type,
+            "category": categories,
         }
         transformed_transactions.append(transaction_dict)
 
