@@ -1,8 +1,6 @@
 from server.celery import app
 
-from expensive.models import TransactionType, Category, Source, Transaction
-from expensive.utils import get_date
-from expensive.serializers import TransactionSerializer
+from expensive.models import TransactionType, Source, Transaction
 
 
 @app.task(ignore_result=True)
@@ -10,7 +8,6 @@ def import_transactions(transformed_transactions):
     """
     :param list transformed_transactions: A list of transformed transactions to add to the database.
     """
-    # source, created = Source.objects.get_or_create(source=source)
     transactions = []
 
     # TODO: Get serializers working
@@ -57,3 +54,25 @@ def import_transactions(transformed_transactions):
         transactions.append(transaction_object)
 
     return transactions
+
+
+@app.task(ignore_result=True)
+def verify_imported_transactions(transformed_transactions, imported_transactions):
+    transformed_amount = 0
+    for transaction in transformed_transactions:
+        transformed_amount += transaction.get('amount')
+
+    imported_amount = 0
+    dates = []
+    for transaction in imported_transactions:
+        imported_amount += transaction.amount
+        dates.append(transaction.post_date)
+
+    verified_transactions = {
+        "transformed_amount": transformed_amount,
+        "imported_amount": imported_amount,
+        "min_date": min(dates),
+        "max_date": max(dates),
+    }
+
+    return verified_transactions

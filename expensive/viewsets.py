@@ -1,6 +1,7 @@
 """Django REST Framework ViewSets for `expensive`."""
-import numpy
+
 from django.conf import settings
+from django.db.models import Sum
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
@@ -9,9 +10,9 @@ from rest_framework.response import Response
 
 from expensive import serializers
 from expensive import permissions
-from expensive.serializers import TransactionSerializer
+from expensive.models import Transaction
 from expensive.utils import get_model, get_transactions
-from expensive.tasks import import_transactions
+from expensive.tasks import import_transactions, verify_imported_transactions
 
 import providers
 
@@ -47,13 +48,32 @@ class TransactionViewSet(ModelViewSet):
                 return Response({'error': f'provider not found, choose from: {settings.SUPPORTED_PROVIDERS}'}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 transformed_transactions = getattr(getattr(getattr(providers, provider), "tasks"), "transform_transactions")(owner=current_user, transactions=transactions)
-                import_transactions(transformed_transactions=transformed_transactions)
+                imported_transactions = import_transactions(transformed_transactions=transformed_transactions)
+                verified_transactions = verify_imported_transactions(transformed_transactions=transformed_transactions, imported_transactions=imported_transactions)
                 # getattr(getattr(getattr(providers, provider), "tasks"), "import_transactions")(owner=current_user, transactions_dict=transactions_dict)
                 # reduce(getattr, f"{provider}.tasks.import_transactions".split("."), providers)(owner=current_user, transactions_dict=transactions_dict)
+                min_date = verified_transactions.get('min_date')
+                max_date = verified_transactions.get('max_date')
+                database_amount = Transaction.objects.filter(
+                    owner=current_user,
+                    source__source=provider,
+                    post_date__gte=min_date,
+                    post_date__lte=max_date
+                ).aggregate(amount=Sum('amount')).get('amount')
 
-                response = Response("File(s) Uploaded Successfully!", status=status.HTTP_200_OK)
-                # transactions = TransactionSerializer(data=transactions).initial_data
-                # response = Response(transactions, status=status.HTTP_200_OK)
+                transformed_amount = verified_transactions.get('transformed_amount')
+                imported_amount = verified_transactions.get('imported_amount')
+
+                if transformed_amount == imported_amount == database_amount:
+                    response_message = f"Data imported successfully 100%, amount imported: ${database_amount}\n"
+                else:
+                    response_message = f"Data import unsuccessful, {transformed_amount / database_amount}%\n"
+                    response_message += f"Original Amount: ${transformed_amount}\n"
+                    response_message += f"Amount after import: ${imported_amount}\n"
+                    response_message += f"Amount in database: ${database_amount}\n"
+                print(response_message)
+
+            response = Response("File(s) Uploaded Successfully!", status=status.HTTP_200_OK)
 
         return response
 
