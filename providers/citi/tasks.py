@@ -1,47 +1,36 @@
 from server.celery import app
 
-from expensive.models import TransactionType, Category, Source, Transaction
 from expensive.utils import get_date
-
-# SOURCE, created = Source.objects.get_or_create(source='citi')
 
 
 @app.task(ignore_result=True)
-def import_transactions(owner, transactions_dict):
-    transactions = []
-    for transaction in transactions_dict:
+def transform_transactions(owner, transactions):
+    """
+    :param ExtendedUser owner: The owner of the transactions being transformed.
+    :param list transactions: A list of transactions to transform.
+    """
+    transformed_transactions = []
+    for transaction in transactions:
         transaction_date = get_date(date_string=transaction.get('Date'), date_format='%Y-%m-%d')
         post_date = transaction_date
         debit = float(transaction.get('Debit'))
         credit = float(transaction.get('Credit'))
         amount = debit + credit
-        transaction_type_name = None
-        transaction_type = None
+        accounting_type = 'debit' if debit > 0 else 'credit'
+        semantic_type = 'expense' if accounting_type == 'debit' else 'payment'
+        categories = [transaction.get('Category')]
 
-        if debit == 0.0:
-            transaction_type_name = 'credit'
-        elif credit == 0.0:
-            transaction_type_name = 'debit'
+        transaction_dict = {
+            "owner": owner,
+            "source": 'citi',
+            "transaction_date": transaction_date,
+            "post_date": post_date,
+            "amount": abs(amount),
+            "description": transaction.get('Description'),
+            "accounting_type": accounting_type,
+            "semantic_type": semantic_type,
+            "category": categories,
+        }
+        transformed_transactions.append(transaction_dict)
 
-        if transaction_type_name is not None:
-            transaction_type, created = TransactionType.objects.get_or_create(transaction_type=transaction_type_name)
-
-        transaction_category, created = Category.objects.get_or_create(category=transaction.get('Category', 'None'))
-
-        if transaction_type is not None:
-            transaction_object, created = Transaction.objects.get_or_create(
-                owner=owner,
-                source=SOURCE,
-                transaction_date=transaction_date,
-                post_date=post_date,
-                amount=abs(amount),
-                description=transaction.get('Description'),
-                type=transaction_type
-            )
-
-            if created:
-                transaction_object.category.add(transaction_category)
-
-            transactions.append(transaction_object)
-
-    return transactions
+    return transformed_transactions
