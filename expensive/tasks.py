@@ -58,21 +58,26 @@ def import_transactions(transformed_transactions):
 
 @app.task(ignore_result=True)
 def verify_imported_transactions(transformed_transactions, imported_transactions):
-    transformed_amount = 0
-    for transaction in transformed_transactions:
-        transformed_amount += transaction.get('amount')
+    verified_transactions = {}
+    try:
+        transformed_amount = 0
+        for transaction in transformed_transactions:
+            transformed_amount += transaction.get('amount')
 
-    imported_amount = 0
-    dates = []
-    for transaction in imported_transactions:
-        imported_amount += transaction.amount
-        dates.append(transaction.post_date)
+        imported_amount = 0
+        dates = []
+        for transaction in imported_transactions:
+            imported_amount += transaction.amount
+            dates.append(transaction.post_date)
 
-    verified_transactions = {
-        "transformed_amount": transformed_amount,
-        "imported_amount": imported_amount,
-        "min_date": min(dates),
-        "max_date": max(dates),
-    }
+        verified_transactions = {
+            "transformed_amount": transformed_amount,
+            "imported_amount": imported_amount,
+            "min_date": min(dates),
+            "max_date": max(dates),
+        }
+    except Exception as error:
+        print(f'An error has occurred: {error}')
+        print('Dates:', dates)
 
     return verified_transactions
