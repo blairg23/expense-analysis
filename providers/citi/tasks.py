@@ -14,8 +14,8 @@ def transform_transactions(owner, transactions):
         try:
             transaction_date = get_date(date_string=transaction.get('Date'), date_format='%Y-%m-%d')
             post_date = transaction_date
-            debit = float(transaction.get('Debit'))
-            credit = float(transaction.get('Credit'))
+            debit = abs(float(transaction.get('Debit')))
+            credit = abs(float(transaction.get('Credit')))
             amount = debit + credit
             accounting_type = 'debit' if debit > 0 else 'credit'
             semantic_type = 'expense' if accounting_type == 'debit' else 'payment'

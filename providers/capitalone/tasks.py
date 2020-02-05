@@ -13,6 +13,7 @@ def transform_transactions(owner, transactions):
     for transaction in transactions:
         try:
             categories = []
+            # If we're looking at pre-2018 transactions:
             if transaction.get('ActivityDate') is not None:
                 transaction_date = get_date(date_string=transaction.get('ActivityDate'), date_format='%Y-%m-%d')
                 post_date = transaction_date
@@ -48,6 +49,5 @@ def transform_transactions(owner, transactions):
             print(f'An error occurred: {error}')
             print('Transaction:\n')
             print(transaction)
-
 
     return transformed_transactions

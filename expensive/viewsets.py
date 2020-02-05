@@ -70,7 +70,7 @@ class TransactionViewSet(ModelViewSet):
                 if transformed_amount == imported_amount == database_amount:
                     response_message = f"Data imported successfully 100%, amount imported: ${database_amount}\n"
                 else:
-                    response_message = f"Data import unsuccessful, {transformed_amount / database_amount}%\n"
+                    response_message = f"Data import unsuccessful, {transformed_amount / database_amount if database_amount is not None else 0}%\n"
                     response_message += f"Original Amount: ${transformed_amount}\n"
                     response_message += f"Amount after import: ${imported_amount}\n"
                     response_message += f"Amount in database: ${database_amount}\n"

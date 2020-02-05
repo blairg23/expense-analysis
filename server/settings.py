@@ -317,4 +317,4 @@ LOGGING1 = {
 }
 
 ### Custom
-SUPPORTED_PROVIDERS = ['capitalone', 'chase', 'citi', 'discover']
+SUPPORTED_PROVIDERS = ['capitalone', 'chase', 'citi', 'discover', 'parksidefcu']
