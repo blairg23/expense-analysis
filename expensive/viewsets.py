@@ -63,6 +63,9 @@ class TransactionViewSet(ModelViewSet):
 
                 transformed_amount = verified_transactions.get('transformed_amount')
                 imported_amount = verified_transactions.get('imported_amount')
+                transformed_transactions = verified_transactions.get('transformed_transactions')
+                imported_transactions = verified_transactions.get('imported_transactions')
+                num_dates = verified_transactions.get('num_dates')
 
                 if transformed_amount == imported_amount == database_amount:
                     response_message = f"Data imported successfully 100%, amount imported: ${database_amount}\n"
@@ -71,6 +74,23 @@ class TransactionViewSet(ModelViewSet):
                     response_message += f"Original Amount: ${transformed_amount}\n"
                     response_message += f"Amount after import: ${imported_amount}\n"
                     response_message += f"Amount in database: ${database_amount}\n"
+                    response_message += f"Original number of transactions: {len(transactions)}\n"
+                    response_message += f"Number of transformed transactions: {transformed_transactions}\n"
+                    response_message += f"Number of imported transactions: {imported_transactions}\n"
+                    response_message += f"Number of imported dates: {num_dates}\n"
+
+                    all_transactions = Transaction.objects.filter(
+                        owner=current_user,
+                        source__source=provider,
+                        post_date__gte=min_date,
+                        post_date__lte=max_date,
+                    ).all()
+
+                    response_message += f"Number of database transactions: {all_transactions.count()}\n"
+
+                    # for transaction in all_transactions:
+                    #     print(transaction)
+
                 print(response_message)
 
             response = Response("File(s) Uploaded Successfully!", status=status.HTTP_200_OK)

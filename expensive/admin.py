@@ -40,5 +40,7 @@ class TransactionAdmin(admin.ModelAdmin):
 
     list_select_related = ['accounting_type', 'semantic_type', 'source', 'owner']
 
+    ordering = ['-post_date']
+
     def categories(self, transaction):
         return ", ".join([str(category) for category in transaction.category.all()])

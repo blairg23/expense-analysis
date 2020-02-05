@@ -45,6 +45,8 @@ def import_transactions(transformed_transactions):
             description=transaction.get('description'),
             accounting_type=accounting_type,
             semantic_type=semantic_type,
+            raw_transaction=transaction.get('transaction'),
+            transformed_transaction=transaction,
         )
 
         if created:
@@ -68,16 +70,23 @@ def verify_imported_transactions(transformed_transactions, imported_transactions
         dates = []
         for transaction in imported_transactions:
             imported_amount += transaction.amount
-            dates.append(transaction.post_date)
+            dates.append(str(transaction.post_date))
 
         verified_transactions = {
             "transformed_amount": transformed_amount,
+            "transformed_transactions": len(transformed_transactions),
             "imported_amount": imported_amount,
+            "imported_transactions": len(imported_transactions),
             "min_date": min(dates),
             "max_date": max(dates),
+            "num_dates": len(dates),
         }
     except Exception as error:
         print(f'An error has occurred: {error}')
         print('Dates:', dates)
+        for transaction in imported_transactions:
+            print('Transaction:', transaction.amount)
+            print('Date:', transaction.post_date)
+            print('Date Type:', type(transaction.post_date))
 
     return verified_transactions

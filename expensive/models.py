@@ -5,6 +5,8 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, User, PermissionsMixin
 from django.db import models
 
+from rest_framework.fields import JSONField
+
 
 class UserType(models.Model):
     name = models.TextField(choices=(('admin', 'Administrator'), ('developer', 'Developer')), unique=True)
@@ -96,6 +98,8 @@ class Transaction(models.Model):
     category = models.ManyToManyField(Category, related_name='transactions')
     accounting_type = models.ForeignKey(TransactionType, related_name='accounting_transactions', on_delete=models.DO_NOTHING)
     semantic_type = models.ForeignKey(TransactionType, related_name='semantic_transactions', on_delete=models.DO_NOTHING)
+    raw_transaction = models.TextField()
+    transformed_transaction = models.TextField()
     # Administrative Fields
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

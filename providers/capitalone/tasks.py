@@ -22,8 +22,8 @@ def transform_transactions(owner, transactions):
             else:
                 transaction_date = get_date(date_string=transaction.get('Transaction Date'), date_format='%Y-%m-%d')
                 post_date = get_date(date_string=transaction.get('Posted Date'), date_format='%Y-%m-%d')
-                debit = float(transaction.get('Debit'))
-                credit = float(transaction.get('Credit'))
+                debit = abs(float(transaction.get('Debit')))
+                credit = abs(float(transaction.get('Credit')))
                 amount = debit + credit
                 accounting_type = 'debit' if debit > 0 else 'credit'
                 semantic_type = 'expense' if accounting_type == 'debit' else 'payment'
@@ -41,11 +41,12 @@ def transform_transactions(owner, transactions):
                 "accounting_type": accounting_type,
                 "semantic_type": semantic_type,
                 "category": categories,
+                "transaction": transaction,
             }
             transformed_transactions.append(transaction_dict)
         except Exception as error:
             print(f'An error occurred: {error}')
-            print('Transactions:\n')
+            print('Transaction:\n')
             print(transaction)
 
 

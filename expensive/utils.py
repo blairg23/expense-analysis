@@ -29,4 +29,5 @@ def get_transactions(transactions_dataframe):
     for index, row in transactions_dataframe.iterrows():
         temp_dict = {str(key): str(value) for key, value in zip(row.index, row[row.index])}
         transactions.append(temp_dict)
+
     return transactions

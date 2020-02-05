@@ -31,11 +31,12 @@ def transform_transactions(owner, transactions):
                 "accounting_type": accounting_type,
                 "semantic_type": semantic_type,
                 "category": categories,
+                "transaction": transaction,
             }
             transformed_transactions.append(transaction_dict)
         except Exception as error:
             print(f'An error occurred: {error}')
-            print('Transactions:\n')
+            print('Transaction:\n')
             print(transaction)
 
     return transformed_transactions
