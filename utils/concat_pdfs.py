@@ -16,26 +16,14 @@ with open(output_csv_filename,'a+') as out_file:
         if input_csv_filename != output_csv_filename:
             print(f"Processing {input_csv_filename}...")
             input_csv_dataframe = pd.read_csv(input_csv_filename)
-            print(f"Input CSV DataFrame: {input_csv_dataframe}")
+            # print(f"Input CSV DataFrame: {input_csv_dataframe}")
             if all_transactions_dataframe is None:
                 all_transactions_dataframe = input_csv_dataframe
             else:
                 all_transactions_dataframe = pd.concat([all_transactions_dataframe, input_csv_dataframe])
 
-            print(f"All Transactions DataFrame: {all_transactions_dataframe}")
+            # print(f"All Transactions DataFrame: {all_transactions_dataframe}")
 
 all_transactions_dataframe['Post Date'] = pd.to_datetime(all_transactions_dataframe['Post Date'])
-all_transactions_dataframe.sort_values('Post Date', inplace=True)
+all_transactions_dataframe.sort_values('Post Date', ascending=True, inplace=True)
 all_transactions_dataframe.to_csv(output_csv_filename, index=False)
-
-#         with open(input_csv_filename,'r') as in_file:
-#             for line in in_file:
-#                 if line in seen: 
-#                     duplicates.add(line)
-#                 else:
-#                     seen.add(line)
-#                     out_file.write(line)
-
-# with open(duplicate_csv_filename, 'a+') as duplicate_file:
-#     for line in duplicates:
-#         duplicate_file.write(line) # Write duplicate rows to a file
