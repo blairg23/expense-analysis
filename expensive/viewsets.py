@@ -16,8 +16,23 @@ from expensive.tasks import import_transactions, verify_imported_transactions
 
 import providers
 
-from functools import reduce
+# from functools import reduce
 import pandas
+
+MONTHS = {
+    '1': 'january',
+    '2': 'february',
+    '3': 'march',
+    '4': 'april',
+    '5': 'may',
+    '6': 'june',
+    '7': 'july',
+    '8': 'august',
+    '9': 'september',
+    '10': 'october',
+    '11': 'november',
+    '12': 'december',
+}
 
 
 class TransactionViewSet(ModelViewSet):
@@ -96,6 +111,49 @@ class TransactionViewSet(ModelViewSet):
             response = Response("File(s) Uploaded Successfully!", status=status.HTTP_200_OK)
 
         return response
+
+    @action(detail=False, methods=['options', 'get'])
+    def yearly_report(self, request):
+        response = []
+        year = request.query_params.get('year')
+
+        summary = {
+            month_name: {
+                provider_name: {} for provider_name in settings.SUPPORTED_PROVIDERS
+            } for month_name in MONTHS.values()
+        }
+
+        # print(summary)
+
+        transactions_summaries = Transaction.objects.filter(
+            post_date__year=year
+        ).values(
+            'source__source',
+            'post_date__month',
+            'semantic_type__transaction_type',
+        ).annotate(total=Sum('amount'))
+
+        for transactions_summary in transactions_summaries:
+            month_key = str(transactions_summary.get('post_date__month'))
+            month_name = MONTHS.get(month_key)
+            provider = transactions_summary.get('source__source')
+            semantic_type = transactions_summary.get('semantic_type__transaction_type')
+            total = transactions_summary.get('total')
+
+            try:
+                summary[month_name][provider][semantic_type] = f"${total}"
+            except KeyError as error:
+                print('Error: ', error)
+                print('Month Key: ', month_key)
+                print('Month Name: ', month_name)
+                print('Provider: ', provider)
+                print('Summary[month_name]: ', summary[month_name])
+                print('Summary[month_name][provider]: ', summary[month_name][provider])
+                print('Semantic Type: ', semantic_type)
+                print('Total: ', total)
+                print("\n")
+
+        return Response(summary, status=status.HTTP_200_OK)
 
     # @action(detail=False, methods=['options', 'get'])
     # def monthly_report(self, request):

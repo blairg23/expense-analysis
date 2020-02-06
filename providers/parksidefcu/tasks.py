@@ -28,7 +28,7 @@ def transform_transactions(owner, transactions):
                 amount = debit + credit
                 description = f"Description: {transaction.get('Description')}\nMemo: {transaction.get('Memo')}"
                 accounting_type = 'debit' if debit > 0 else 'credit'
-                semantic_type = 'income' if accounting_type == 'debit' else 'expense'
+                semantic_type = 'income' if accounting_type == 'credit' else 'expense'
                 categories = []
 
             transaction_dict = {
