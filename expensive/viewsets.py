@@ -173,6 +173,7 @@ class TransactionViewSet(ModelViewSet):
         ).values(
             'source__source',
             'category__category',
+            'description',
         ).annotate(total=Sum('amount'))
 
         return Response(transactions_summaries, status=status.HTTP_200_OK)
