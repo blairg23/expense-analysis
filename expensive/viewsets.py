@@ -155,21 +155,24 @@ class TransactionViewSet(ModelViewSet):
 
         return Response(summary, status=status.HTTP_200_OK)
 
-    # @action(detail=False, methods=['options', 'get'])
-    # def monthly_report(self, request):
-    #     response = []
-    #     valid_transactions = []
-    #     start_date = request.query_params.get('start_date')
-    #     end_date = request.query_params.get('end_date')
-    #     transactions = get_model("expensive.Transaction").objects.filter(owner=self.request.user, post_date__gte=start_date, post_date__lte=end_date)
-    #     for transaction in transactions:
-    #         transaction_data = {
-    #
-    #         }
-        #     transaction_serializer = TransactionSerializer(data=transaction)
-        #     # print(transaction_serializer.is_valid())
-        #     print(transaction_serializer.initial_data())
-        #     if transaction_serializer.is_valid():
-        #         valid_transactions.append(transaction_serializer.data())
-        #
-        # return Response(valid_transactions, status=status.HTTP_200_OK)
+    @action(detail=False, methods=['options', 'get'])
+    def monthly_report(self, request):
+        response = []
+        month = request.query_params.get("month")
+        year = request.query_params.get('year')
+
+        summary = {
+            provider_name: {} for provider_name in settings.SUPPORTED_PROVIDERS
+        }
+
+        # print(summary)
+
+        transactions_summaries = Transaction.objects.filter(
+            post_date__year=year,
+            post_date__month=month,
+        ).values(
+            'source__source',
+            'category__category',
+        ).annotate(total=Sum('amount'))
+
+        return Response(transactions_summaries, status=status.HTTP_200_OK)

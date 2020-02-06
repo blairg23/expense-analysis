@@ -12,6 +12,7 @@ def transform_transactions(owner, transactions):
     transformed_transactions = []
     for transaction in transactions:
         try:
+            categories = []
             transaction_date = get_date(date_string=transaction.get('Transaction Date'), date_format='%Y-%m-%d')
             post_date = get_date(date_string=transaction.get('Post Date'), date_format='%Y-%m-%d')
             amount = float(transaction.get('Amount'))
@@ -19,7 +20,9 @@ def transform_transactions(owner, transactions):
             semantic_type = 'expense' if accounting_type == 'debit' else 'payment'
             category1 = transaction.get('Category')
             category2 = transaction.get('Type')
-            categories = [category1, category2]
+            for category in [category1, category2]:
+                if category is not None:
+                    categories.append(category)
 
             transaction_dict = {
                 "owner": owner,
@@ -30,7 +33,7 @@ def transform_transactions(owner, transactions):
                 "description": transaction.get('Description'),
                 "accounting_type": accounting_type,
                 "semantic_type": semantic_type,
-                "category": categories,
+                "categories": categories,
                 "transaction": transaction,
             }
             transformed_transactions.append(transaction_dict)

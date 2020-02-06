@@ -41,7 +41,7 @@ def transform_transactions(owner, transactions):
                 "description": transaction.get('Description'),
                 "accounting_type": accounting_type,
                 "semantic_type": semantic_type,
-                "category": categories,
+                "categories": categories,
                 "transaction": transaction,
             }
             transformed_transactions.append(transaction_dict)

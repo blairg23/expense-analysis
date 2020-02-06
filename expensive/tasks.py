@@ -1,6 +1,6 @@
 from server.celery import app
 
-from expensive.models import TransactionType, Source, Transaction
+from expensive.models import TransactionType, Source, Transaction, Category
 
 
 @app.task(ignore_result=True)
@@ -51,7 +51,12 @@ def import_transactions(transformed_transactions):
 
         if created:
             for category in transaction.get('categories', []):
-                transaction_object.category.add(category)
+                category_object, created = Category.objects.get_or_create(
+                    category=category,
+                    description=category,
+                )
+                transaction_object.category.add(category_object)
+                transaction_object.save()
 
         transactions.append(transaction_object)
 
