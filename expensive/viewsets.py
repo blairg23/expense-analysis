@@ -171,9 +171,9 @@ class TransactionViewSet(ModelViewSet):
             post_date__year=year,
             post_date__month=month,
         ).values(
-            'source__source',
+            # 'source__source',
             'category__category',
-            'description',
+            # 'description',
         ).annotate(total=Sum('amount'))
 
         return Response(transactions_summaries, status=status.HTTP_200_OK)
